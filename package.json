@@ -1,0 +1,30 @@
+{
+    "version": "1.0.0",
+    "description": "Playground for testing out frontend",
+    "author": "Scott Robertson (https://github.com/sc0tt5)",
+    "license": "GNU GPL v3",
+    "private": true,
+    "scripts": {
+        "start": "npm run build && webpack-dev-server --mode development --inline --hot --open",
+        "build": "rimraf dist && webpack"
+    },
+    "devDependencies": {
+        "awesome-typescript-loader": "5.2.1",
+        "css-loader": "^3.2.0",
+        "friendly-errors-webpack-plugin": "^1.7.0",
+        "html-loader": "^0.5.5",
+        "html-webpack-plugin": "^3.2.0",
+        "mini-css-extract-plugin": "^0.8.0",
+        "node-sass": "^4.12.0",
+        "resolve-url-loader": "^3.1.0",
+        "rimraf": "^3.0.0",
+        "sass-loader": "^8.0.0",
+        "style-loader": "^1.0.0",
+        "tslib": "^1.10.0",
+        "tslint": "^5.19.0",
+        "typescript": "3.6.2",
+        "webpack": "4.39.3",
+        "webpack-cli": "^3.3.7",
+        "webpack-dev-server": "3.8.0"
+    }
+}
