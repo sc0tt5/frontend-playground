@@ -3,7 +3,6 @@
     "description": "Playground for testing out frontend",
     "author": "Scott Robertson (https://github.com/sc0tt5)",
     "license": "GNU GPL v3",
-    "private": true,
     "scripts": {
         "start": "npm run build && webpack-dev-server --mode development --inline --hot --open",
         "build": "rimraf dist && webpack"
