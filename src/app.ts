@@ -5,12 +5,14 @@ function* hello() {
   yield 'World';
 }
 
+const iterator = hello();
+
 const observer = {
   next: value => console.log('next:::', value),
   error: error => console.log('error:::', error),
   complete: () => console.log('complete!')
 };
 
-const source$ = from(fetch('https://api.github.com/users/octocat'));
+const source$ = from(iterator);
 
 source$.subscribe(observer);
