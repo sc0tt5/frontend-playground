@@ -77,3 +77,19 @@ body {
 #message {
   font-size: 40px;
 }
+
+#abort {
+  background-color: maroon;
+  border-radius: 5px;
+  border: none;
+  color: white;
+  cursor: pointer;
+  height: 50px;
+  margin-top: 50px;
+  outline: none;
+  width: 200px;
+
+  &:hover {
+    background-color: darkred;
+  }
+}
