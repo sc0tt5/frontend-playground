@@ -1,18 +1,22 @@
-import { from } from 'rxjs';
+import { fromEvent } from 'rxjs';
+import { map } from 'rxjs/operators';
 
-function* hello() {
-  yield 'Hello';
-  yield 'World';
+// helpers
+function calculateScrollPercent(element: HTMLElement): number {
+  const { scrollTop, scrollHeight, clientHeight } = element;
+  return (scrollTop / (scrollHeight - clientHeight)) * 100;
 }
 
-const iterator = hello();
+// elem
+const progressBar: HTMLElement = document.querySelector('.progress-bar');
 
-const observer = {
-  next: value => console.log('next:::', value),
-  error: error => console.log('error:::', error),
-  complete: () => console.log('complete!')
-};
+// streams
+const scroll$ = fromEvent(document, 'scroll');
+const progress$ = scroll$.pipe(
+  // percent progress
+  map(({ target }) => calculateScrollPercent((<HTMLDocument>target).documentElement))
+);
 
-const source$ = from(iterator);
-
-source$.subscribe(observer);
+progress$.subscribe((percent: number) => {
+  progressBar.style.width = `${percent}%`;
+});
