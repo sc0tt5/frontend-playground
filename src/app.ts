@@ -1,22 +1,23 @@
-import { fromEvent } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { interval } from 'rxjs';
+import { filter, mapTo, scan } from 'rxjs/operators';
 
-// helpers
-function calculateScrollPercent(element: HTMLElement): number {
-  const { scrollTop, scrollHeight, clientHeight } = element;
-  return (scrollTop / (scrollHeight - clientHeight)) * 100;
-}
-
-// elem
-const progressBar: HTMLElement = document.querySelector('.progress-bar');
+// elem refs
+const countdown = document.getElementById('countdown');
+const message = document.getElementById('message');
 
 // streams
-const scroll$ = fromEvent(document, 'scroll');
-const progress$ = scroll$.pipe(
-  // percent progress
-  map(({ target }) => calculateScrollPercent((<HTMLDocument>target).documentElement))
-);
+const counter$ = interval(1000);
 
-progress$.subscribe((percent: number) => {
-  progressBar.style.width = `${percent}%`;
-});
+counter$
+  .pipe(
+    mapTo(-1),
+    scan((accumulator, current) => accumulator + current, 10),
+    filter(value => value >= 0)
+  )
+  .subscribe(value => {
+    countdown.innerHTML = value.toString();
+
+    if (!value) {
+      message.innerHTML = 'Liftoff!';
+    }
+  });

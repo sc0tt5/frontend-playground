@@ -72,18 +72,8 @@ body {
   top: 6px;
 }
 
-#app {
-  p {
-    font-size: 18px;
-    padding: 20px 50px;
-    text-align: left;
-  }
-}
-
-.progress-bar {
-  position: fixed;
-  top: 0;
-  height: 4px;
-  width: 0;
-  background: #ff16b7;
+// extra for each lab
+#countdown,
+#message {
+  font-size: 40px;
 }
