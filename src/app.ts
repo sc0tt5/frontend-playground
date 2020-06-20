@@ -1,23 +1,19 @@
-import { interval } from 'rxjs';
-import { filter, mapTo, scan } from 'rxjs/operators';
+import { fromEvent, of } from 'rxjs';
+import { first, map } from 'rxjs/operators';
 
-// elem refs
-const countdown = document.getElementById('countdown');
-const message = document.getElementById('message');
+const numbers$ = of(1, 2, 3, 4, 5);
+const click$ = fromEvent(document, 'click');
 
-// streams
-const counter$ = interval(1000);
-
-counter$
+click$
   .pipe(
-    mapTo(-1),
-    scan((accumulator, current) => accumulator + current, 10),
-    filter(value => value >= 0)
+    map((event: MouseEvent) => ({
+      x: event.clientX,
+      y: event.clientY
+    })),
+    // filter, take(1)
+    first(({ y }) => y > 200)
   )
-  .subscribe(value => {
-    countdown.innerHTML = value.toString();
-
-    if (!value) {
-      message.innerHTML = 'Liftoff!';
-    }
+  .subscribe({
+    next: console.log,
+    complete: () => console.log('Complete!')
   });
