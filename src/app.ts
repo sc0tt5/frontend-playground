@@ -1,27 +1,13 @@
-import { fromEvent, interval } from 'rxjs';
-import { mapTo, scan, takeUntil, takeWhile, tap } from 'rxjs/operators';
+import { fromEvent } from 'rxjs';
+import { debounceTime, distinctUntilChanged, pluck } from 'rxjs/operators';
 
 // elem refs
-const countdown = document.getElementById('countdown');
-const message = document.getElementById('message');
-const abortButton = document.getElementById('abort');
+const inputBox = document.getElementById('text-input');
 
 // streams
-const counter$ = interval(1000);
-const abortClick$ = fromEvent(abortButton, 'click');
+const click$ = fromEvent(document, 'click');
+const input$ = fromEvent(inputBox, 'keyup');
 
-counter$
-  .pipe(
-    mapTo(-1),
-    scan((accumulator, current) => accumulator + current, 10),
-    tap(console.log), // takeWhile will prevent from continuing when 0
-    takeWhile(value => value >= 0),
-    takeUntil(abortClick$) // the event will stop the timer
-  )
-  .subscribe(value => {
-    countdown.innerHTML = value.toString();
-
-    if (!value) {
-      message.innerHTML = 'Liftoff!';
-    }
-  });
+input$
+  .pipe(debounceTime(1000), pluck('target', 'value'), distinctUntilChanged())
+  .subscribe(console.log);

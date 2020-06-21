@@ -73,23 +73,11 @@ body {
 }
 
 // extra for each lab
-#countdown,
-#message {
-  font-size: 40px;
-}
-
-#abort {
-  background-color: maroon;
+#text-input {
   border-radius: 5px;
-  border: none;
-  color: white;
-  cursor: pointer;
-  height: 50px;
+  font-size: 20px;
+  height: 40px;
   margin-top: 50px;
-  outline: none;
-  width: 200px;
-
-  &:hover {
-    background-color: darkred;
-  }
+  padding: 5px;
+  width: 175px;
 }
