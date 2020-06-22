@@ -1,21 +1,28 @@
 import { fromEvent } from 'rxjs';
 import { ajax } from 'rxjs/ajax';
-import { debounceTime, distinctUntilChanged, map, mergeMap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, pluck, switchMap } from 'rxjs/operators';
 
+/** note: use mergeMap for post/save and switchMap when
+ * call is cancellable like get/read
+ *
+ */
+const BASE_URL = 'https://api.openbrewerydb.org/breweries';
 // elem refs
 const inputBox = document.getElementById('text-input');
+const typeaheadContainer = document.getElementById('typeahead-container');
 
 // streams
-const click$ = fromEvent(document, 'click');
 const input$ = fromEvent(inputBox, 'keyup');
 
 input$
   .pipe(
-    debounceTime(1000),
-    mergeMap(({ target }) => {
-      const term = (<any>target).value;
-      return ajax.getJSON(`https://api.github.com/users/${term}`);
-    }),
-    distinctUntilChanged()
+    debounceTime(200),
+    pluck('target', 'value'),
+    distinctUntilChanged(),
+    switchMap(searchTerm => {
+      return ajax.getJSON(`${BASE_URL}?by_name=${searchTerm}`);
+    })
   )
-  .subscribe(console.log);
+  .subscribe((response: any[]) => {
+    typeaheadContainer.innerHTML = response.map(b => b.name).join('<br>');
+  });
