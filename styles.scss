@@ -73,16 +73,40 @@ body {
 }
 
 // extra for each lab
-#text-input {
-  border-radius: 5px;
-  font-size: 20px;
-  height: 40px;
-  margin-top: 50px;
-  padding: 5px;
-  width: 175px;
+p {
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 20px;
 }
 
-#typeahead-container {
-  font-size: 18px;
-  margin-top: 50px;
+button {
+  border: none;
+  height: 40px;
+  margin: 10px 20px;
+  outline: none;
+  width: 150px;
+
+  &:hover {
+    cursor: pointer;
+    opacity: 0.9;
+  }
+}
+
+img {
+  margin: 50px;
+  max-width: 400px;
+  max-height: 400px;
+}
+
+#start,
+#stop {
+  color: white;
+}
+
+#start {
+  background: green;
+}
+
+#stop {
+  background: red;
 }

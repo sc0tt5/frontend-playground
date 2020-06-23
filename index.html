@@ -11,8 +11,14 @@
     </header>
     <div id="app">
       <h1>Ultimate RxJS</h1>
-      <input id="text-input" />
-      <div id="typeahead-container"></div>
+      <p>Start polling to request random <a href="https://random.dog/">dog</a> images!</p>
+      <p>
+        Polling Status:
+        <span id="polling-status">Stopped</span>
+      </p>
+      <button id="start">Start Polling</button>
+      <button id="stop">Stop Polling</button>
+      <img src="https://random.dog/10fa025a-b04a-47d7-bfed-98747269b6c2.jpg" alt="dog!" id="dog" />
     </div>
   </body>
 </html>
