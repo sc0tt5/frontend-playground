@@ -1,6 +1,6 @@
-import { fromEvent } from 'rxjs';
+import { EMPTY, fromEvent } from 'rxjs';
 import { ajax } from 'rxjs/ajax';
-import { debounceTime, distinctUntilChanged, pluck, switchMap } from 'rxjs/operators';
+import { catchError, debounceTime, distinctUntilChanged, pluck, switchMap } from 'rxjs/operators';
 
 /** note: use mergeMap for post/save and switchMap when
  * call is cancellable like get/read
@@ -20,7 +20,7 @@ input$
     pluck('target', 'value'),
     distinctUntilChanged(),
     switchMap(searchTerm => {
-      return ajax.getJSON(`${BASE_URL}?by_name=${searchTerm}`);
+      return ajax.getJSON(`${BASE_URL}?by_name=${searchTerm}`).pipe(catchError(error => EMPTY));
     })
   )
   .subscribe((response: any[]) => {
