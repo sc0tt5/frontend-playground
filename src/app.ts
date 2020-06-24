@@ -1,28 +1,55 @@
-import { forkJoin } from 'rxjs';
-import { ajax } from 'rxjs/ajax';
+import { combineLatest, fromEvent, of } from 'rxjs';
+import { delay, filter, map, mergeMap, share, tap } from 'rxjs/operators';
+import { calculateMortgage } from './helpers';
 
-const GITHUB_API_BASE = 'https://api.github.com';
+// elem refs
+const loanAmount = document.getElementById('loanAmount');
+const interest = document.getElementById('interest');
+const loanLength = document.querySelectorAll('.loanLength');
+const expected = document.getElementById('expected');
+
+// helpers
+const createInputValueStream = elem => {
+  return fromEvent(elem, 'input').pipe(map((event: any) => parseFloat(event.target.value)));
+};
+
+// simulating a save request
+const saveResponse = mortgageAmount => {
+  return of(mortgageAmount).pipe(delay(1000));
+};
+
+// streams
+const interest$ = createInputValueStream(interest);
+const loanLength$ = createInputValueStream(loanLength);
+const loanAmount$ = createInputValueStream(loanAmount);
 
 /*
- * forkJoin waits for all inner observables to complete
- * before emitting the last emitted value of each.
- * The use cases for forkJoin are generally similar to
- * Promise.all
+ * Combine streams of the three values needed to complete
+ * our mortgage calculation. Once all three are filled out
+ * any subsequent updates will trigger a new calculation.
  */
-forkJoin({
-  user: ajax.getJSON(`${GITHUB_API_BASE}/users/reactivex`),
-  repo: ajax.getJSON(`${GITHUB_API_BASE}/users/reactivex/repos`)
-}).subscribe(console.log);
+const calculation$ = combineLatest(interest$, loanAmount$, loanLength$).pipe(
+  map(([interest, loanAmount, loanLength]) => {
+    return calculateMortgage(interest, loanAmount, loanLength);
+  }),
+  // proving the stream is shared
+  tap(console.log),
+  /*
+   *  If a field is empty, we'll just ignore the update for now
+   *  by filtering out invalid values.
+   */
+  filter(mortgageAmount => !isNaN(mortgageAmount)),
+  /*
+   *  Demonstrate sharing a stream so saves won't impact
+   *  display updates. Behind the scenes this uses a Subject,
+   *  which we we learn about in the first lessons of the
+   *  Masterclass course.
+   */
+  share()
+);
 
-/*
- * You can also pass in comma seperated arugments and
- * receieve an array in return. This is the only option if
- * you are using less than RxJS 6.5
- */
+calculation$.subscribe(mortgageAmount => {
+  expected.innerHTML = mortgageAmount;
+});
 
-// forkJoin(
-//   ajax.getJSON(`${GITHUB_API_BASE}/users/reactivex`),
-//   ajax.getJSON(`${GITHUB_API_BASE}/users/reactivex/repos`)
-// ).subscribe(([user, repos]) => {
-//   // perform action
-// });
+calculation$.pipe(mergeMap(mortgageAmount => saveResponse(mortgageAmount))).subscribe();
