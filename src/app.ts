@@ -1,13 +1,20 @@
-import { loadingService } from './loading-service';
+import { ObservableStore } from './store';
 
-const loadingOverlay = document.getElementById('loading-overlay');
-
-loadingService.loadingStatus$.subscribe(isLoading => {
-  if (isLoading) {
-    loadingOverlay.classList.add('open');
-  } else {
-    loadingOverlay.classList.remove('open');
-  }
+const store = new ObservableStore({
+  user: 'joe',
+  isAuthenticated: true
 });
 
-setTimeout(() => loadingService.hideLoading(), 1500);
+store.selectState('user').subscribe(console.log);
+
+store.updateState({
+  user: 'bob'
+});
+
+store.updateState({
+  isAuthenticated: true
+});
+
+store.updateState({
+  isAuthenticated: false
+});
