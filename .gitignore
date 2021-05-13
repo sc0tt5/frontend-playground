@@ -87,4 +87,7 @@ typings/
 # DynamoDB Local files
 .dynamodb/
 
-dist
+dist/
+tmp/
+.DS_Store
+settings.json

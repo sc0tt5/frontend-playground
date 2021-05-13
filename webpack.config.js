@@ -69,16 +69,12 @@ module.exports = {
         app: `${sourcePath}/app.ts`
     },
     output: {
-        filename: '[name].bundle.[hash:4].js',
-        chunkFilename: '[name].bundle.[hash:4].js',
+        filename: '[name].bundle.[fullhash:4].js',
+        chunkFilename: '[name].bundle.[fullhash:4].js',
         path: distPath
     },
     node: {
-        console: false,
-        global: true,
-        process: true,
-        Buffer: false,
-        setImmediate: false
+        global: true
     },
     module: {
         rules
