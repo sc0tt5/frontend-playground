@@ -1,6 +1,8 @@
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+
 const path = require('path');
 
 const sourcePath = path.resolve(__dirname, 'src');
@@ -22,9 +24,10 @@ const rules = [
     },
     {
         test: /\.ts$/,
+        exclude: /node_modules/,
         use: [
             {
-                loader: 'awesome-typescript-loader',
+                loader: 'ts-loader',
                 options: {
                     configFile: 'tsconfig.json'
                 }
@@ -34,6 +37,7 @@ const rules = [
 ];
 
 const plugins = [
+    new CleanWebpackPlugin(),
     new HtmlWebPackPlugin({
         template: 'index.html'
     }),
